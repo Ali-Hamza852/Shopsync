@@ -1,6 +1,6 @@
 <div align="center">
 
-![Profile1](https://github.com/user-attachments/assets/18d31df2-44f4-4acb-a915-90c35d7e2da3)
+<img src="https://github.com/user-attachments/assets/18d31df2-44f4-4acb-a915-90c35d7e2da3" width="180" alt="ShopSync Logo" style="border-radius: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); margin-bottom: 20px;" />
 
 # 🛒 ShopSync
 
