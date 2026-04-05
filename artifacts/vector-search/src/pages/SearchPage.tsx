@@ -24,7 +24,7 @@ export function SearchPage() {
     setHasSearched(true);
 
     try {
-      const data = await searchProducts({ query, top_k: 10, threshold: 0.90 });
+      const data = await searchProducts({ query, top_k: 10, threshold: 0.75 });
       setResults(data.results ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Search failed. Please try again.");
