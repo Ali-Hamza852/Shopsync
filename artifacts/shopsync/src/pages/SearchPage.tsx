@@ -15,6 +15,12 @@ export default function SearchPage() {
   const [error, setError] = useState<string | null>(null);
   const [searched, setSearched] = useState(false);
 
+  function handleHome() {
+    setSearched(false);
+    setResults([]);
+    setError(null);
+  }
+
   async function handleSearch(query: string) {
     setLoading(true);
     setError(null);
@@ -36,12 +42,12 @@ export default function SearchPage() {
 
       <header className="site-header">
         <div className="header-inner">
-          <div className="logo-wrap">
+          <button className="logo-wrap" onClick={handleHome} aria-label="Go to homepage">
             <img src={logoUrl} alt="Shopsync logo" className="logo-img" />
             <span className="logo-text">
               <strong>Shop</strong>sync
             </span>
-          </div>
+          </button>
           <button
             className="theme-toggle"
             onClick={toggleTheme}
