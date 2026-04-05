@@ -1,10 +1,13 @@
 export interface Product {
+  _id?: string;
+  Platform?: string;
   title: string;
-  description: string;
-  url: string;
-  price: string;
+  description?: string;
+  url?: string;
+  price?: number | string;
   image_url?: string;
   asin?: string;
+  attributes?: Record<string, string>;
 }
 
 export interface GroupData {

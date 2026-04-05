@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, ChevronDown, ChevronUp, Tag, Sparkles } from "lucide-react";
 import type { SearchResult } from "@/lib/types";
 import { ProductImage } from "./ProductImage";
-import { getPlatformName, getPlatformIcon, generateRedirectUrl } from "@/lib/api";
+import { getPlatformName, getPlatformIcon, generateRedirectUrl, formatPrice } from "@/lib/api";
 
 interface ClusterCardProps {
   result: SearchResult;
@@ -24,8 +24,11 @@ function getScoreBg(score: number): string {
   return "rgba(251, 191, 36, 0.12)";
 }
 
-function openProductLink(url: string) {
-  window.open(url, "_blank", "noopener,noreferrer");
+function openProductLink(product: Parameters<typeof generateRedirectUrl>[0]) {
+  const redirectUrl = generateRedirectUrl(product);
+  if (redirectUrl && redirectUrl !== "#") {
+    window.open(redirectUrl, "_blank", "noopener,noreferrer");
+  }
 }
 
 export function ClusterCard({ result, index }: ClusterCardProps) {
@@ -37,6 +40,9 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
   const primaryProduct = products[0];
   const scoreColor = getScoreColor(match_score);
   const scoreBg = getScoreBg(match_score);
+
+  const primaryPlatform = primaryProduct ? getPlatformName(primaryProduct) : "Store";
+  const primaryPrice = primaryProduct ? formatPrice(primaryProduct.price) : null;
 
   return (
     <motion.div
@@ -102,7 +108,7 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
           {representative_title}
         </h3>
 
-        {primaryProduct?.price && (
+        {primaryPrice && (
           <div className="flex items-center gap-1.5 mb-3">
             <Tag className="w-3.5 h-3.5 text-primary" />
             <span
@@ -110,29 +116,38 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
               style={{ color: "hsl(192, 80%, 52%)" }}
               data-testid={`text-price-${group_id}`}
             >
-              {primaryProduct.price}
+              {primaryPrice}
             </span>
+            {primaryPlatform !== "Store" && (
+              <span className="text-xs text-muted-foreground">
+                on {primaryPlatform}
+              </span>
+            )}
           </div>
         )}
 
         <div className="flex items-center gap-2 flex-wrap mb-3">
-          {products.slice(0, 3).map((p, i) => (
-            <button
-              key={i}
-              onClick={() => openProductLink(generateRedirectUrl(p))}
-              data-testid={`link-product-${group_id}-${i}`}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all hover:scale-105 cursor-pointer"
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                color: "rgba(255,255,255,0.7)",
-              }}
-            >
-              <span>{getPlatformIcon(p.url)}</span>
-              <span>{getPlatformName(p.url)}</span>
-              {p.price && <span className="text-primary/80">· {p.price}</span>}
-            </button>
-          ))}
+          {products.slice(0, 3).map((p, i) => {
+            const platform = getPlatformName(p);
+            const price = formatPrice(p.price);
+            return (
+              <button
+                key={i}
+                onClick={() => openProductLink(p)}
+                data-testid={`link-product-${group_id}-${i}`}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all hover:scale-105 cursor-pointer"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  color: "rgba(255,255,255,0.7)",
+                }}
+              >
+                <span>{getPlatformIcon(platform)}</span>
+                <span>{platform}</span>
+                {price && <span className="text-primary/80">· {price}</span>}
+              </button>
+            );
+          })}
         </div>
 
         {products.length > 0 && (
@@ -162,39 +177,43 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
               className="overflow-hidden"
             >
               <div className="mt-3 space-y-2">
-                {products.map((p, i) => (
-                  <motion.button
-                    key={i}
-                    onClick={() => openProductLink(generateRedirectUrl(p))}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    data-testid={`link-product-full-${group_id}-${i}`}
-                    className="w-full flex items-start justify-between gap-2 p-2.5 rounded-lg transition-all group text-left cursor-pointer"
-                    style={{
-                      background: "rgba(255,255,255,0.03)",
-                      border: "1px solid rgba(255,255,255,0.05)",
-                    }}
-                  >
-                    <div className="flex items-start gap-2 min-w-0">
-                      <span className="text-base mt-0.5">{getPlatformIcon(p.url)}</span>
-                      <div className="min-w-0">
-                        <div className="text-xs font-medium text-foreground/80 line-clamp-2 group-hover:text-foreground transition-colors">
-                          {p.title || representative_title}
+                {products.map((p, i) => {
+                  const platform = getPlatformName(p);
+                  const price = formatPrice(p.price);
+                  return (
+                    <motion.button
+                      key={i}
+                      onClick={() => openProductLink(p)}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      data-testid={`link-product-full-${group_id}-${i}`}
+                      className="w-full flex items-start justify-between gap-2 p-2.5 rounded-lg transition-all group text-left cursor-pointer"
+                      style={{
+                        background: "rgba(255,255,255,0.03)",
+                        border: "1px solid rgba(255,255,255,0.05)",
+                      }}
+                    >
+                      <div className="flex items-start gap-2 min-w-0">
+                        <span className="text-base mt-0.5">{getPlatformIcon(platform)}</span>
+                        <div className="min-w-0">
+                          <div className="text-xs font-medium text-foreground/80 line-clamp-2 group-hover:text-foreground transition-colors">
+                            {p.title || representative_title}
+                          </div>
+                          <div className="text-xs text-muted-foreground mt-0.5">{platform}</div>
                         </div>
-                        <div className="text-xs text-muted-foreground mt-0.5">{getPlatformName(p.url)}</div>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      {p.price && (
-                        <span className="text-xs font-semibold" style={{ color: "hsl(192, 80%, 52%)" }}>
-                          {p.price}
-                        </span>
-                      )}
-                      <ExternalLink className="w-3 h-3 text-muted-foreground group-hover:text-primary transition-colors" />
-                    </div>
-                  </motion.button>
-                ))}
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {price && (
+                          <span className="text-xs font-semibold" style={{ color: "hsl(192, 80%, 52%)" }}>
+                            {price}
+                          </span>
+                        )}
+                        <ExternalLink className="w-3 h-3 text-muted-foreground group-hover:text-primary transition-colors" />
+                      </div>
+                    </motion.button>
+                  );
+                })}
               </div>
             </motion.div>
           )}

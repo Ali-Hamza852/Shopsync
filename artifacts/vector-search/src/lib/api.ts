@@ -19,39 +19,41 @@ export async function searchProducts(payload: SearchPayload): Promise<SearchResp
   return response.json() as Promise<SearchResponse>;
 }
 
-export function getPlatformName(url: string): string {
-  try {
-    const hostname = new URL(url).hostname.replace("www.", "");
-    if (hostname.includes("amazon")) return "Amazon";
-    if (hostname.includes("walmart")) return "Walmart";
-    if (hostname.includes("ebay")) return "eBay";
-    if (hostname.includes("target")) return "Target";
-    if (hostname.includes("bestbuy")) return "Best Buy";
-    if (hostname.includes("costco")) return "Costco";
-    if (hostname.includes("etsy")) return "Etsy";
-    if (hostname.includes("alibaba")) return "Alibaba";
-    if (hostname.includes("aliexpress")) return "AliExpress";
-    if (hostname.includes("newegg")) return "Newegg";
-    const parts = hostname.split(".");
-    return parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
-  } catch {
-    return "Store";
+export function getPlatformName(product: Product): string {
+  if (product.Platform) return product.Platform;
+  if (product.url) {
+    try {
+      const hostname = new URL(product.url).hostname.replace("www.", "");
+      if (hostname.includes("amazon")) return "Amazon";
+      if (hostname.includes("walmart")) return "Walmart";
+      if (hostname.includes("ebay")) return "eBay";
+      if (hostname.includes("target")) return "Target";
+      if (hostname.includes("bestbuy")) return "Best Buy";
+      const parts = hostname.split(".");
+      return parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+    } catch {
+      return "Store";
+    }
   }
+  return "Store";
 }
 
-export function getPlatformIcon(url: string): string {
-  try {
-    const hostname = new URL(url).hostname.replace("www.", "");
-    if (hostname.includes("amazon")) return "🟠";
-    if (hostname.includes("walmart")) return "🔵";
-    if (hostname.includes("ebay")) return "🟢";
-    if (hostname.includes("target")) return "🔴";
-    if (hostname.includes("bestbuy")) return "🔵";
-    if (hostname.includes("etsy")) return "🟤";
-    return "🛒";
-  } catch {
-    return "🛒";
-  }
+export function getPlatformIcon(platform: string): string {
+  const p = platform.toLowerCase();
+  if (p.includes("amazon")) return "🟠";
+  if (p.includes("walmart")) return "🔵";
+  if (p.includes("ebay")) return "🟢";
+  if (p.includes("target")) return "🔴";
+  if (p.includes("bestbuy") || p.includes("best buy")) return "🔵";
+  if (p.includes("etsy")) return "🟤";
+  return "🛒";
+}
+
+export function formatPrice(price?: number | string): string | null {
+  if (price === undefined || price === null || price === "") return null;
+  const num = typeof price === "string" ? parseFloat(price) : price;
+  if (isNaN(num)) return String(price);
+  return `$${num.toFixed(2)}`;
 }
 
 function titleToDashes(title: string): string {
@@ -62,21 +64,17 @@ function titleToDashes(title: string): string {
 }
 
 export function generateRedirectUrl(product: Product): string {
-  const { url, asin, title } = product;
+  const platform = getPlatformName(product).toLowerCase();
+  const { asin, title, url } = product;
 
-  try {
-    const hostname = new URL(url).hostname.replace("www.", "");
-
-    if (hostname.includes("amazon") && asin) {
-      return `https://www.amazon.com/dp/${asin}`;
-    }
-
-    if (hostname.includes("walmart") && asin && title) {
-      const dashedTitle = titleToDashes(title);
-      return `https://www.walmart.com/ip/${dashedTitle}/${asin}`;
-    }
-  } catch {
+  if (platform.includes("amazon") && asin) {
+    return `https://www.amazon.com/dp/${asin}`;
   }
 
-  return url;
+  if (platform.includes("walmart") && asin && title) {
+    const dashedTitle = titleToDashes(title);
+    return `https://www.walmart.com/ip/${dashedTitle}/${asin}`;
+  }
+
+  return url || "#";
 }
