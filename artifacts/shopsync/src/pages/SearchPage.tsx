@@ -110,8 +110,8 @@ export default function SearchPage() {
 
         {!loading && results.length > 0 && (
           <div className="results-grid">
-            {results.map((result) => (
-              <ClusterCard key={result.group_data.group_id} result={result} />
+            {results.map((result, index) => (
+              <ClusterCard key={result?.group_data?.group_id ?? `result-${index}`} result={result} />
             ))}
           </div>
         )}

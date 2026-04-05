@@ -14,23 +14,28 @@ export async function searchProducts(query: string): Promise<SearchResponse> {
   return res.json();
 }
 
-export function getPlatformName(platform: string): string {
+export function getPlatformName(platform: string | null | undefined): string {
+  if (!platform) return "Unknown";
   const p = platform.toLowerCase();
   if (p.includes("amazon")) return "Amazon";
   if (p.includes("walmart")) return "Walmart";
   return platform;
 }
 
-export function generateRedirectUrl(platform: string, asin: string, title: string): string {
+export function generateRedirectUrl(
+  platform: string | null | undefined,
+  asin: string | null | undefined,
+  title: string | null | undefined
+): string {
   const p = getPlatformName(platform);
   if (p === "Walmart") {
-    const slug = title
+    const slug = (title ?? "product")
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
-    return `https://www.walmart.com/ip/${slug}/${asin}`;
+    return `https://www.walmart.com/ip/${slug}/${asin ?? ""}`;
   }
-  return `https://www.amazon.com/dp/${asin}`;
+  return `https://www.amazon.com/dp/${asin ?? ""}`;
 }
 
 export function formatPrice(price: number | null | undefined): string {
@@ -38,6 +43,7 @@ export function formatPrice(price: number | null | undefined): string {
   return `$${price.toFixed(2)}`;
 }
 
-export function formatMatchScore(score: number): string {
+export function formatMatchScore(score: number | null | undefined): string {
+  if (score == null || isNaN(score)) return "N/A";
   return `${Math.round(score * 100)}% match`;
 }
