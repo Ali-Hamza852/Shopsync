@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/Ali-Hamza852/Shopsync/a6542d8753b11e369eddb1ae0245a7d2415329af/attached_assets/Profile1_1775390001168.jpeg" width="180" alt="ShopSync Logo" style="border-radius: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); margin-bottom: 20px;" />
+![Profile1](https://github.com/user-attachments/assets/18d31df2-44f4-4acb-a915-90c35d7e2da3)
 
 # 🛒 ShopSync
 
