@@ -4,6 +4,7 @@ export interface Product {
   url: string;
   price: string;
   image_url?: string;
+  asin?: string;
 }
 
 export interface GroupData {

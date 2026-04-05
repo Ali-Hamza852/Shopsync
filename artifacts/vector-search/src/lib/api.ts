@@ -1,4 +1,4 @@
-import type { SearchPayload, SearchResponse } from "./types";
+import type { SearchPayload, SearchResponse, Product } from "./types";
 
 const HF_BASE_URL = "https://alihamza852-fyp-project-hnsw.hf.space";
 
@@ -17,18 +17,6 @@ export async function searchProducts(payload: SearchPayload): Promise<SearchResp
   }
 
   return response.json() as Promise<SearchResponse>;
-}
-
-export async function fetchProductImage(productUrl: string): Promise<string | null> {
-  try {
-    const params = new URLSearchParams({ url: productUrl });
-    const response = await fetch(`/api/fetch-image?${params.toString()}`);
-    if (!response.ok) return null;
-    const data = await response.json() as { imageUrl: string | null };
-    return data.imageUrl ?? null;
-  } catch {
-    return null;
-  }
 }
 
 export function getPlatformName(url: string): string {
@@ -64,4 +52,31 @@ export function getPlatformIcon(url: string): string {
   } catch {
     return "🛒";
   }
+}
+
+function titleToDashes(title: string): string {
+  return title
+    .trim()
+    .replace(/[^a-zA-Z0-9\s]/g, "")
+    .replace(/\s+/g, "-");
+}
+
+export function generateRedirectUrl(product: Product): string {
+  const { url, asin, title } = product;
+
+  try {
+    const hostname = new URL(url).hostname.replace("www.", "");
+
+    if (hostname.includes("amazon") && asin) {
+      return `https://www.amazon.com/dp/${asin}`;
+    }
+
+    if (hostname.includes("walmart") && asin && title) {
+      const dashedTitle = titleToDashes(title);
+      return `https://www.walmart.com/ip/${dashedTitle}/${asin}`;
+    }
+  } catch {
+  }
+
+  return url;
 }

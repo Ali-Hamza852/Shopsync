@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, AlertCircle } from "lucide-react";
+import { AlertCircle, Zap } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
 import { ClusterCard } from "@/components/ClusterCard";
 import { SkeletonCard } from "@/components/SkeletonCard";
@@ -46,7 +46,7 @@ export function SearchPage() {
       <HeroBackground />
 
       <div className="relative z-10">
-        <header className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+        <header className="flex items-center px-6 py-4 max-w-7xl mx-auto">
           <button
             onClick={handleHomeReset}
             data-testid="button-home-logo"
@@ -59,13 +59,6 @@ export function SearchPage() {
               className="h-9 w-auto rounded-lg"
             />
           </button>
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <div
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ background: "hsl(142, 72%, 50%)", boxShadow: "0 0 6px hsl(142, 72%, 50%)" }}
-            />
-            Powered by HNSW Vector Search
-          </div>
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -77,74 +70,40 @@ export function SearchPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.3 }}
-                className="flex flex-col items-center justify-center text-center py-24 sm:py-32"
+                className="flex flex-col items-center justify-center text-center py-20 sm:py-28"
               >
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="mb-4"
+                  className="mb-3"
                 >
-                  <span
-                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium"
-                    style={{
-                      background: "rgba(96, 130, 255, 0.1)",
-                      border: "1px solid rgba(96, 130, 255, 0.2)",
-                      color: "hsl(224, 76%, 70%)",
-                    }}
+                  <h1
+                    className="text-6xl sm:text-7xl lg:text-8xl leading-none tracking-tight"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
-                    <Zap className="w-3 h-3" />
-                    AI-Powered Semantic Product Discovery
-                  </span>
+                    <span className="text-white font-black">Shop</span>
+                    <span className="text-white font-normal">sync</span>
+                  </h1>
                 </motion.div>
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
-                  className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 leading-tight"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.02em" }}
+                  className="text-base sm:text-lg font-medium mb-12"
+                  style={{ color: "hsl(224, 76%, 65%)" }}
                 >
-                  Find products with
-                  <br />
-                  <span className="text-gradient-blue">natural language</span>
-                </motion.h1>
-
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className="text-base sm:text-lg text-muted-foreground mb-10 max-w-xl leading-relaxed"
-                >
-                  Describe what you're looking for in plain English. Our vector search engine finds the
-                  best matching products from across the web and groups identical items together.
+                  Smarter search. Better shopping.
                 </motion.p>
 
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
                   className="w-full"
                 >
                   <SearchBar onSearch={handleSearch} isLoading={isLoading} />
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                  className="mt-10 flex items-center gap-8 text-xs text-muted-foreground"
-                >
-                  {[
-                    { label: "Semantic matching", color: "hsl(224, 76%, 60%)" },
-                    { label: "Multi-platform", color: "hsl(270, 60%, 55%)" },
-                    { label: "Price comparison", color: "hsl(192, 80%, 52%)" },
-                  ].map(({ label, color }) => (
-                    <div key={label} className="flex items-center gap-1.5">
-                      <div className="w-1.5 h-1.5 rounded-full" style={{ background: color }} />
-                      {label}
-                    </div>
-                  ))}
                 </motion.div>
               </motion.section>
             ) : (
@@ -229,10 +188,7 @@ export function SearchPage() {
                           Found{" "}
                           <span className="font-semibold text-foreground">{results.length}</span>{" "}
                           product groups matching{" "}
-                          <span
-                            className="font-medium"
-                            style={{ color: "hsl(224, 76%, 65%)" }}
-                          >
+                          <span className="font-medium" style={{ color: "hsl(224, 76%, 65%)" }}>
                             "{lastQuery}"
                           </span>
                         </p>
@@ -254,12 +210,6 @@ export function SearchPage() {
             )}
           </AnimatePresence>
         </main>
-
-        {!hasSearched && (
-          <footer className="relative z-10 text-center py-8 text-xs text-muted-foreground/40">
-            Built with HNSW vector search · Powered by Hugging Face
-          </footer>
-        )}
       </div>
     </div>
   );

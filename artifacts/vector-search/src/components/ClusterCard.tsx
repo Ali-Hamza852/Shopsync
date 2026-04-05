@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, ChevronDown, ChevronUp, Tag, Sparkles } from "lucide-react";
 import type { SearchResult } from "@/lib/types";
 import { ProductImage } from "./ProductImage";
-import { getPlatformName, getPlatformIcon } from "@/lib/api";
+import { getPlatformName, getPlatformIcon, generateRedirectUrl } from "@/lib/api";
 
 interface ClusterCardProps {
   result: SearchResult;
@@ -22,6 +22,10 @@ function getScoreBg(score: number): string {
   if (score >= 0.90) return "rgba(96, 130, 255, 0.12)";
   if (score >= 0.85) return "rgba(147, 102, 230, 0.12)";
   return "rgba(251, 191, 36, 0.12)";
+}
+
+function openProductLink(url: string) {
+  window.open(url, "_blank", "noopener,noreferrer");
 }
 
 export function ClusterCard({ result, index }: ClusterCardProps) {
@@ -113,24 +117,21 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
 
         <div className="flex items-center gap-2 flex-wrap mb-3">
           {products.slice(0, 3).map((p, i) => (
-            <a
+            <button
               key={i}
-              href={p.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={() => openProductLink(generateRedirectUrl(p))}
               data-testid={`link-product-${group_id}-${i}`}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all hover:scale-105"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all hover:scale-105 cursor-pointer"
               style={{
                 background: "rgba(255,255,255,0.05)",
                 border: "1px solid rgba(255,255,255,0.08)",
                 color: "rgba(255,255,255,0.7)",
               }}
-              onClick={(e) => e.stopPropagation()}
             >
               <span>{getPlatformIcon(p.url)}</span>
               <span>{getPlatformName(p.url)}</span>
               {p.price && <span className="text-primary/80">· {p.price}</span>}
-            </a>
+            </button>
           ))}
         </div>
 
@@ -162,16 +163,14 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
             >
               <div className="mt-3 space-y-2">
                 {products.map((p, i) => (
-                  <motion.a
+                  <motion.button
                     key={i}
-                    href={p.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={() => openProductLink(generateRedirectUrl(p))}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05 }}
                     data-testid={`link-product-full-${group_id}-${i}`}
-                    className="flex items-start justify-between gap-2 p-2.5 rounded-lg transition-all group"
+                    className="w-full flex items-start justify-between gap-2 p-2.5 rounded-lg transition-all group text-left cursor-pointer"
                     style={{
                       background: "rgba(255,255,255,0.03)",
                       border: "1px solid rgba(255,255,255,0.05)",
@@ -194,7 +193,7 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
                       )}
                       <ExternalLink className="w-3 h-3 text-muted-foreground group-hover:text-primary transition-colors" />
                     </div>
-                  </motion.a>
+                  </motion.button>
                 ))}
               </div>
             </motion.div>
