@@ -44,24 +44,26 @@ export function SearchBar({ onSearch, isLoading }: SearchBarProps) {
     inputRef.current?.focus();
   };
 
+  const hasQuery = !!query.trim() && !isLoading;
+
   return (
     <div className="w-full max-w-3xl mx-auto relative">
       <motion.div
         animate={{
           boxShadow: isFocused
-            ? "0 0 0 1px rgba(96, 130, 255, 0.5), 0 0 30px rgba(96, 130, 255, 0.2), 0 8px 32px rgba(0,0,0,0.4)"
-            : "0 0 0 1px rgba(255,255,255,0.08), 0 8px 24px rgba(0,0,0,0.3)",
+            ? "var(--t-searchbar-focused)"
+            : "var(--t-searchbar-normal)",
         }}
         transition={{ duration: 0.2 }}
         className="relative rounded-2xl overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, rgba(30, 38, 60, 0.9) 0%, rgba(22, 28, 48, 0.95) 100%)",
+          background: "linear-gradient(135deg, var(--t-searchbar-bg-start) 0%, var(--t-searchbar-bg-end) 100%)",
         }}
       >
         <div className="flex items-center gap-3 px-5 py-4">
           <motion.div
-            animate={{ 
-              color: isFocused ? "hsl(224, 76%, 65%)" : "hsl(215, 20%, 45%)",
+            animate={{
+              color: isFocused ? "hsl(224, 76%, 60%)" : "hsl(215, 20%, 50%)",
               scale: isFocused ? 1.1 : 1,
             }}
             transition={{ duration: 0.2 }}
@@ -102,14 +104,14 @@ export function SearchBar({ onSearch, isLoading }: SearchBarProps) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleSubmit}
-            disabled={!query.trim() || isLoading}
+            disabled={!hasQuery}
             data-testid="button-search-submit"
             className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             style={{
-              background: query.trim() && !isLoading
+              background: hasQuery
                 ? "linear-gradient(135deg, hsl(224, 76%, 60%) 0%, hsl(270, 60%, 55%) 100%)"
-                : "rgba(255,255,255,0.07)",
-              color: query.trim() && !isLoading ? "white" : "hsl(215, 20%, 50%)",
+                : "var(--t-search-btn-off)",
+              color: hasQuery ? "white" : "var(--t-search-btn-off-text)",
             }}
           >
             {isLoading ? (
@@ -140,9 +142,9 @@ export function SearchBar({ onSearch, isLoading }: SearchBarProps) {
             transition={{ duration: 0.15 }}
             className="absolute top-full left-0 right-0 mt-2 rounded-2xl overflow-hidden z-50"
             style={{
-              background: "rgba(18, 24, 40, 0.98)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
+              background: "var(--t-dropdown-bg)",
+              border: "1px solid var(--t-dropdown-border)",
+              boxShadow: "var(--t-dropdown-shadow)",
               backdropFilter: "blur(20px)",
             }}
           >
@@ -160,7 +162,10 @@ export function SearchBar({ onSearch, isLoading }: SearchBarProps) {
                 transition={{ delay: i * 0.03 }}
                 onMouseDown={() => handleSuggestion(s)}
                 data-testid={`button-suggestion-${i}`}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left hover:bg-white/5 transition-colors text-muted-foreground hover:text-foreground"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left transition-colors text-muted-foreground hover:text-foreground"
+                style={{ ["--hover-bg" as string]: "var(--t-dropdown-hover)" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "var(--t-dropdown-hover)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
               >
                 <Search className="w-3.5 h-3.5 shrink-0 text-muted-foreground/50" />
                 {s}

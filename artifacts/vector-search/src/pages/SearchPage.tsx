@@ -1,11 +1,12 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertCircle, Zap } from "lucide-react";
+import { AlertCircle, Zap, Sun, Moon } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
 import { ClusterCard } from "@/components/ClusterCard";
 import { SkeletonCard } from "@/components/SkeletonCard";
 import { HeroBackground } from "@/components/HeroBackground";
 import { searchProducts } from "@/lib/api";
+import { useTheme } from "@/hooks/use-theme";
 import type { SearchResult } from "@/lib/types";
 import shopsyncLogo from "@assets/Profile1_1775390001168.jpeg";
 
@@ -15,6 +16,7 @@ export function SearchPage() {
   const [error, setError] = useState<string | null>(null);
   const [lastQuery, setLastQuery] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
 
   const handleSearch = useCallback(async (query: string) => {
     if (isLoading) return;
@@ -42,11 +44,14 @@ export function SearchPage() {
   }, []);
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden" style={{ background: "hsl(222, 47%, 5%)" }}>
+    <div
+      className="min-h-screen relative overflow-x-hidden"
+      style={{ background: "var(--t-page-bg)" }}
+    >
       <HeroBackground />
 
       <div className="relative z-10">
-        <header className="flex items-center px-6 py-4 max-w-7xl mx-auto">
+        <header className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
           <button
             onClick={handleHomeReset}
             data-testid="button-home-logo"
@@ -59,6 +64,48 @@ export function SearchPage() {
               className="h-9 w-auto rounded-lg"
             />
           </button>
+
+          <motion.button
+            onClick={toggleTheme}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            data-testid="button-theme-toggle"
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            className="flex items-center gap-2 px-3 py-2 rounded-xl transition-all"
+            style={{
+              background: "var(--t-toggle-bg)",
+              border: "1px solid var(--t-toggle-border)",
+              color: "var(--t-toggle-icon)",
+            }}
+          >
+            <AnimatePresence mode="wait">
+              {isDark ? (
+                <motion.span
+                  key="sun"
+                  initial={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex items-center gap-1.5 text-xs font-medium"
+                >
+                  <Sun className="w-4 h-4" />
+                  <span className="hidden sm:block">Light</span>
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="moon"
+                  initial={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                  transition={{ duration: 0.18 }}
+                  className="flex items-center gap-1.5 text-xs font-medium"
+                >
+                  <Moon className="w-4 h-4" />
+                  <span className="hidden sm:block">Dark</span>
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -80,10 +127,13 @@ export function SearchPage() {
                 >
                   <h1
                     className="text-6xl sm:text-7xl lg:text-8xl leading-none tracking-tight"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                    style={{
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      color: "var(--t-hero-text)",
+                    }}
                   >
-                    <span className="text-white font-black">Shop</span>
-                    <span className="text-white font-normal">sync</span>
+                    <span className="font-black">Shop</span>
+                    <span className="font-normal">sync</span>
                   </h1>
                 </motion.div>
 
@@ -92,7 +142,7 @@ export function SearchPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
                   className="text-base sm:text-lg font-medium mb-12"
-                  style={{ color: "hsl(224, 76%, 65%)" }}
+                  style={{ color: "var(--t-tagline)" }}
                 >
                   Smarter search. Better shopping.
                 </motion.p>
@@ -147,7 +197,10 @@ export function SearchPage() {
                           animate={{ rotate: 360 }}
                           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                           className="w-4 h-4 border-2 rounded-full"
-                          style={{ borderColor: "rgba(96, 130, 255, 0.3)", borderTopColor: "hsl(224, 76%, 60%)" }}
+                          style={{
+                            borderColor: "var(--t-loading-ring)",
+                            borderTopColor: "var(--t-loading-top)",
+                          }}
                         />
                         Searching across product catalog...
                       </div>
@@ -174,7 +227,7 @@ export function SearchPage() {
                       </div>
                       <h3 className="text-lg font-semibold text-foreground mb-2">No results found</h3>
                       <p className="text-sm text-muted-foreground max-w-sm">
-                        Try a different query or adjust your search terms. Our AI works best with descriptive phrases.
+                        Try a different query or adjust your search terms.
                       </p>
                     </motion.div>
                   ) : (
@@ -188,7 +241,7 @@ export function SearchPage() {
                           Found{" "}
                           <span className="font-semibold text-foreground">{results.length}</span>{" "}
                           product groups matching{" "}
-                          <span className="font-medium" style={{ color: "hsl(224, 76%, 65%)" }}>
+                          <span className="font-medium" style={{ color: "var(--t-tagline)" }}>
                             "{lastQuery}"
                           </span>
                         </p>

@@ -11,17 +11,17 @@ interface ClusterCardProps {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 0.95) return "hsl(142, 72%, 50%)";
-  if (score >= 0.90) return "hsl(224, 76%, 60%)";
+  if (score >= 0.95) return "hsl(142, 72%, 46%)";
+  if (score >= 0.90) return "hsl(224, 76%, 58%)";
   if (score >= 0.85) return "hsl(270, 60%, 55%)";
-  return "hsl(38, 90%, 55%)";
+  return "hsl(38, 90%, 50%)";
 }
 
 function getScoreBg(score: number): string {
-  if (score >= 0.95) return "rgba(74, 222, 128, 0.12)";
-  if (score >= 0.90) return "rgba(96, 130, 255, 0.12)";
-  if (score >= 0.85) return "rgba(147, 102, 230, 0.12)";
-  return "rgba(251, 191, 36, 0.12)";
+  if (score >= 0.95) return "rgba(74, 222, 128, 0.10)";
+  if (score >= 0.90) return "rgba(96, 130, 255, 0.10)";
+  if (score >= 0.85) return "rgba(147, 102, 230, 0.10)";
+  return "rgba(251, 191, 36, 0.10)";
 }
 
 function openProductLink(product: Parameters<typeof generateRedirectUrl>[0]) {
@@ -52,13 +52,13 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
       data-testid={`card-product-${group_id}`}
       className="rounded-2xl overflow-hidden card-hover"
       style={{
-        background: "linear-gradient(160deg, rgba(30, 38, 60, 0.9) 0%, rgba(18, 24, 40, 0.95) 100%)",
-        border: "1px solid rgba(255,255,255,0.07)",
+        background: "linear-gradient(160deg, var(--t-card-bg-start) 0%, var(--t-card-bg-end) 100%)",
+        border: "1px solid var(--t-card-border)",
       }}
     >
       <div
         className="relative h-40 overflow-hidden"
-        style={{ background: "rgba(12, 16, 30, 0.8)" }}
+        style={{ background: "var(--t-card-image-bg)" }}
       >
         {primaryProduct && (
           <ProductImage imageUrl={primaryProduct.image_url} title={representative_title} />
@@ -75,7 +75,7 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold"
             style={{
               background: scoreBg,
-              border: `1px solid ${scoreColor}40`,
+              border: `1px solid ${scoreColor}38`,
               color: scoreColor,
             }}
           >
@@ -86,9 +86,9 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
             <div
               className="px-2 py-0.5 rounded-lg text-xs font-medium"
               style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                color: "rgba(255,255,255,0.5)",
+                background: "var(--t-badge-bg)",
+                border: "1px solid var(--t-badge-border)",
+                color: "var(--t-expand-text)",
               }}
             >
               {products.length} stores
@@ -108,7 +108,7 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
             <Tag className="w-3.5 h-3.5 text-primary" />
             <span
               className="text-sm font-bold"
-              style={{ color: "hsl(192, 80%, 52%)" }}
+              style={{ color: "var(--t-price-color)" }}
               data-testid={`text-price-${group_id}`}
             >
               {primaryPrice}
@@ -132,9 +132,9 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
                 data-testid={`link-product-${group_id}-${i}`}
                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all hover:scale-105 cursor-pointer"
                 style={{
-                  background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  color: "rgba(255,255,255,0.7)",
+                  background: "var(--t-badge-bg)",
+                  border: "1px solid var(--t-badge-border)",
+                  color: "var(--t-badge-text)",
                 }}
               >
                 <span>{getPlatformIcon(platform)}</span>
@@ -151,11 +151,10 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
             data-testid={`button-expand-${group_id}`}
             className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all"
             style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.06)",
-              color: "rgba(255,255,255,0.5)",
+              background: "var(--t-expand-bg)",
+              border: "1px solid var(--t-expand-border)",
+              color: "var(--t-expand-text)",
             }}
-            whileHover={{ backgroundColor: "rgba(255,255,255,0.07)" }}
           >
             <span>View all {products.length} listings</span>
             {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -185,8 +184,8 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
                       data-testid={`link-product-full-${group_id}-${i}`}
                       className="w-full flex items-start justify-between gap-2 p-2.5 rounded-lg transition-all group text-left cursor-pointer"
                       style={{
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.05)",
+                        background: "var(--t-listing-bg)",
+                        border: "1px solid var(--t-listing-border)",
                       }}
                     >
                       <div className="flex items-start gap-2 min-w-0">
@@ -200,7 +199,7 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
                       </div>
                       <div className="flex items-center gap-1.5 shrink-0">
                         {price && (
-                          <span className="text-xs font-semibold" style={{ color: "hsl(192, 80%, 52%)" }}>
+                          <span className="text-xs font-semibold" style={{ color: "var(--t-price-color)" }}>
                             {price}
                           </span>
                         )}
