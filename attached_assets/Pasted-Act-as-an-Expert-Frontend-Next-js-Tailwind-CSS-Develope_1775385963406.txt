@@ -1,0 +1,59 @@
+Act as an Expert Frontend Next.js & Tailwind CSS Developer. 
+
+I want to build a modern, highly aesthetic, and responsive Next.js web application. This app is an AI-powered E-Commerce Vector Search Engine. 
+
+### PROJECT CONTEXT
+Do NOT write any code for web scraping, database connections, or AI model training. My backend is already fully deployed on a Hugging Face Space running FastAPI. Your ONLY job is to build the frontend UI and the logic to communicate with my existing API.
+
+### BACKEND API DETAILS
+- Base URL: `https://alihamza852-fyp-project-hnsw.hf.space`
+- Endpoint: `POST /search`
+- Payload Expected: 
+  {
+    "query": "string (the user's search query)",
+    "top_k": 10,
+    "threshold": 0.90
+  }
+- Expected Response Structure:
+  {
+    "results": [
+      {
+        "match_score": 0.98,
+        "group_data": {
+          "group_id": "uuid-string",
+          "representative_title": "Product Title",
+          "products": [
+             { "title": "...", "description": "...", "url": "https://amazon.com/...", "price": "..." }
+          ]
+        }
+      }
+    ]
+  }
+
+### CORE FEATURES & PAGES REQUIRED:
+
+1. AI Search Interface (Hero Section)
+- A clean, modern landing page with a centralized, large, LLM-style search bar (think ChatGPT or Perplexity UI).
+- Subtle background animations or glassmorphism effects to make it look cutting-edge.
+- Users type their query, hit Enter, and a sleek loading state (skeletons or a pulsing AI glow) appears while waiting for the Hugging Face API.
+
+2. Product Image Fetching (Next.js API Route)
+- The database contains the `url` to the product page, but NOT the direct image link. 
+- Create a Next.js server-side API route (e.g., `/api/fetch-image`) that takes a product URL as a query parameter, fetches the HTML of that URL, parses the `<meta property="og:image" content="..." />` tag to extract the product image, and returns it. 
+- Use this proxy route in the frontend to display images so we do not get blocked by client-side CORS policies. Fallback to a sleek placeholder image if the fetch fails.
+
+3. Results Display (Product Grid)
+- Below the search bar, display the results in a beautiful, responsive CSS Grid.
+- Each result is a "Cluster Card". Because my API groups identical products from different platforms together, the card should display:
+   - The `representative_title` as the main heading.
+   - The fetched product image.
+   - The `match_score` formatted as a percentage confidence badge (e.g., "98% Match").
+   - A list or dropdown of the individual `products` inside that group, showing their respective platforms (e.g., Amazon, Walmart) and prices, with links to the original URLs.
+- Implement hover effects, smooth transitions, and subtle drop shadows.
+
+### DESIGN SYSTEM
+- Framework: Next.js (App Router), React, TypeScript.
+- Styling: Tailwind CSS, Framer Motion (for animations), and Lucide React (for icons).
+- Theme: A premium dark mode aesthetic. Use deep dark backgrounds (like Slate-900 or Zinc-950) with vibrant accent colors (like Electric Blue or Neon Purple) for the search button and confidence badges.
+
+Please generate the complete project structure, the UI components, the API fetching logic, and the image-proxy API route. Ensure the code is modular, well-commented, and production-ready.
