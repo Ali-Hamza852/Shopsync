@@ -2,7 +2,7 @@ export interface Product {
   _id: string;
   Platform: string;
   title: string;
-  price: number;
+  price: number | null;
   asin: string;
   description?: string;
   attributes?: Record<string, string>;

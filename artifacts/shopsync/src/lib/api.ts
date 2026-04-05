@@ -33,7 +33,8 @@ export function generateRedirectUrl(platform: string, asin: string, title: strin
   return `https://www.amazon.com/dp/${asin}`;
 }
 
-export function formatPrice(price: number): string {
+export function formatPrice(price: number | null | undefined): string {
+  if (price == null || isNaN(price)) return "Price N/A";
   return `$${price.toFixed(2)}`;
 }
 
