@@ -399,7 +399,7 @@ importers:
         specifier: 'catalog:'
         version: 3.25.76
 
-  artifacts/vector-search:
+  artifacts/shopsync:
     devDependencies:
       '@hookform/resolvers':
         specifier: ^3.10.0

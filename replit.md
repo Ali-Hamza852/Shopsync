@@ -2,7 +2,7 @@
 
 ## Overview
 
-pnpm workspace monorepo using TypeScript. Contains an AI-powered E-Commerce Vector Search Engine frontend.
+pnpm workspace monorepo using TypeScript. Contains **Shopsync** — an AI-powered e-commerce product search frontend.
 
 ## Stack
 
@@ -15,8 +15,8 @@ pnpm workspace monorepo using TypeScript. Contains an AI-powered E-Commerce Vect
 - **Validation**: Zod (`zod/v4`), `drizzle-zod`
 - **API codegen**: Orval (from OpenAPI spec)
 - **Build**: esbuild (CJS bundle)
-- **Frontend**: React + Vite + Tailwind CSS + Framer Motion
-- **UI**: Shadcn components, Lucide React icons
+- **Frontend**: React + Vite (custom CSS with `--t-*` tokens, no Tailwind)
+- **Fonts**: Inter (body), Space Grotesk (headings/logo)
 
 ## Key Commands
 
@@ -28,34 +28,40 @@ pnpm workspace monorepo using TypeScript. Contains an AI-powered E-Commerce Vect
 
 ## Artifacts
 
-### vector-search (AI Vector Search Engine)
+### shopsync (Main App)
 - **Preview path**: `/`
-- **Location**: `artifacts/vector-search/`
-- **Description**: A modern dark-mode AI product search UI that calls the Hugging Face HNSW vector search API (`https://alihamza852-fyp-project-hnsw.hf.space/search`).
+- **Location**: `artifacts/shopsync/`
+- **Port**: 25267
+- **Description**: AI-powered product search using the Hugging Face HNSW vector search API (`https://alihamza852-fyp-project-hnsw.hf.space/search`). Results grouped by cluster with match score badges, product images, prices, and platform-specific redirect links. Supports dark/light theme toggle.
 - **Key pages**:
-  - `src/pages/SearchPage.tsx` — Main hero + results page
+  - `src/pages/SearchPage.tsx` — Hero + search bar + results page
 - **Key components**:
-  - `src/components/SearchBar.tsx` — LLM-style search input with suggestions dropdown
-  - `src/components/ClusterCard.tsx` — Product group card with match score badge, expandable listings
-  - `src/components/ProductImage.tsx` — Lazy image loader using the `/api/fetch-image` proxy
-  - `src/components/SkeletonCard.tsx` — Animated loading skeleton
-  - `src/components/HeroBackground.tsx` — Animated gradient + floating particles backdrop
+  - `src/components/SearchBar.tsx` — Search textarea with submit button and spinner
+  - `src/components/ClusterCard.tsx` — Product group card with match score badge and product grid
+  - `src/components/ProductImage.tsx` — Lazy image with fallback SVG
+  - `src/components/SkeletonCard.tsx` — Shimmer loading skeleton
+  - `src/components/HeroBackground.tsx` — Animated gradient orbs + grid backdrop
 - **API utilities**:
-  - `src/lib/api.ts` — `searchProducts()`, `fetchProductImage()`, `getPlatformName()`, `getPlatformIcon()`
-  - `src/lib/types.ts` — TypeScript interfaces for the search API response
+  - `src/lib/api.ts` — `searchProducts()`, `getPlatformName()`, `generateRedirectUrl()`, `formatPrice()`, `formatMatchScore()`
+  - `src/lib/types.ts` — TypeScript interfaces (`Product`, `GroupData`, `SearchResult`, `SearchResponse`)
+  - `src/hooks/use-theme.tsx` — `useTheme()` hook persisting to localStorage
+- **CSS**: `src/index.css` — Custom CSS with `--t-*` tokens for light/dark themes (no Tailwind)
+- **Favicon**: `public/favicon.jpeg` (from `attached_assets/Profile1_1775394278163.jpeg`)
+- **Logo**: `attached_assets/Profile1_1775390001168.jpeg` (used via `@assets` alias)
+- **Theme**: Defaults to dark. Toggling adds `.dark`/`.light` to `<html>`. Inline script in `index.html` prevents flash.
 
 ### api-server (Express API)
 - **Preview path**: `/api`
 - **Location**: `artifacts/api-server/`
 - **Routes**:
   - `GET /api/healthz` — Health check
-  - `GET /api/fetch-image?url=<url>` — Server-side proxy that fetches a product URL and extracts the `og:image` meta tag to avoid client-side CORS issues
 
-## Design System
-- Deep dark background: `hsl(222, 47%, 5%)`
-- Primary accent: Electric Blue `hsl(224, 76%, 60%)`
-- Secondary accent: Neon Purple `hsl(270, 60%, 55%)`
-- Tertiary accent: Cyan `hsl(192, 80%, 52%)`
-- Fonts: Inter (body), Space Grotesk (headings)
+## Design System (Shopsync)
+- Deep dark background: `#09090f`
+- Light background: `#f5f7fa`
+- Primary accent (blue): `#3b82f6` / `#60a5fa` (dark mode)
+- Price color: `#059669` (light) / `#34d399` (dark)
+- Amazon badge: `#f97316` (orange)
+- Walmart badge: `#1d4ed8` (blue, light) / `#60a5fa` (dark)
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
