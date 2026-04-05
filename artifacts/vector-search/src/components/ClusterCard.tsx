@@ -51,7 +51,7 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
         style={{ background: "rgba(12, 16, 30, 0.8)" }}
       >
         {primaryProduct && (
-          <ProductImage productUrl={primaryProduct.url} title={representative_title} />
+          <ProductImage imageUrl={primaryProduct.image_url} title={representative_title} />
         )}
 
         <div className="absolute top-3 left-3">

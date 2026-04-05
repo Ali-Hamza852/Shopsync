@@ -1,12 +1,13 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Github, AlertCircle } from "lucide-react";
+import { Zap, AlertCircle } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
 import { ClusterCard } from "@/components/ClusterCard";
 import { SkeletonCard } from "@/components/SkeletonCard";
 import { HeroBackground } from "@/components/HeroBackground";
 import { searchProducts } from "@/lib/api";
 import type { SearchResult } from "@/lib/types";
+import shopsyncLogo from "@assets/Profile1_1775390001168.jpeg";
 
 export function SearchPage() {
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -33,25 +34,31 @@ export function SearchPage() {
     }
   }, [isLoading]);
 
+  const handleHomeReset = useCallback(() => {
+    setHasSearched(false);
+    setResults([]);
+    setError(null);
+    setLastQuery(null);
+  }, []);
+
   return (
     <div className="min-h-screen relative overflow-x-hidden" style={{ background: "hsl(222, 47%, 5%)" }}>
       <HeroBackground />
 
       <div className="relative z-10">
-        <header className="flex items-center justify-between px-6 py-5 max-w-7xl mx-auto">
-          <div className="flex items-center gap-2.5">
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center"
-              style={{
-                background: "linear-gradient(135deg, hsl(224, 76%, 60%) 0%, hsl(270, 60%, 55%) 100%)",
-              }}
-            >
-              <Zap className="w-4 h-4 text-white" />
-            </div>
-            <span className="font-bold text-lg text-foreground" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              VectorSearch<span style={{ color: "hsl(224, 76%, 60%)" }}>.ai</span>
-            </span>
-          </div>
+        <header className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
+          <button
+            onClick={handleHomeReset}
+            data-testid="button-home-logo"
+            className="flex items-center gap-2.5 hover:opacity-80 transition-opacity cursor-pointer"
+            aria-label="Go to homepage"
+          >
+            <img
+              src={shopsyncLogo}
+              alt="Shopsync logo"
+              className="h-9 w-auto rounded-lg"
+            />
+          </button>
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <div
               className="w-1.5 h-1.5 rounded-full"
@@ -213,7 +220,7 @@ export function SearchPage() {
                     </motion.div>
                   ) : (
                     <motion.div
-                      key="results"
+                      key="results-grid"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
