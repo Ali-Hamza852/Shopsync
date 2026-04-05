@@ -57,14 +57,16 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
       }}
     >
       <div
-        className="relative h-52 overflow-hidden"
+        className="relative h-40 overflow-hidden"
         style={{ background: "rgba(12, 16, 30, 0.8)" }}
       >
         {primaryProduct && (
           <ProductImage imageUrl={primaryProduct.image_url} title={representative_title} />
         )}
+      </div>
 
-        <div className="absolute top-3 left-3">
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-2.5">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -75,32 +77,25 @@ export function ClusterCard({ result, index }: ClusterCardProps) {
               background: scoreBg,
               border: `1px solid ${scoreColor}40`,
               color: scoreColor,
-              backdropFilter: "blur(8px)",
             }}
           >
             <Sparkles className="w-3 h-3" />
             {scorePercent}% Match
           </motion.div>
-        </div>
-
-        {products.length > 1 && (
-          <div className="absolute top-3 right-3">
+          {products.length > 1 && (
             <div
               className="px-2 py-0.5 rounded-lg text-xs font-medium"
               style={{
-                background: "rgba(0,0,0,0.6)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                color: "rgba(255,255,255,0.7)",
-                backdropFilter: "blur(8px)",
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                color: "rgba(255,255,255,0.5)",
               }}
             >
               {products.length} stores
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
-      <div className="p-4">
         <h3
           className="font-semibold text-sm leading-snug line-clamp-2 text-foreground mb-3"
           data-testid={`text-product-title-${group_id}`}
