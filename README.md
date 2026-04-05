@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="https://raw.githubusercontent.com/Ali-Hamza852/Shopsync/a6542d8753b11e369eddb1ae0245a7d2415329af/attached_assets/Profile1_1775390001168.jpeg" width="180" alt="ShopSync Logo" style="border-radius: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); margin-bottom: 20px;" />
+
 # 🛒 ShopSync
 
 **One Search. Every Store. Perfect Match.** *Powered by advanced AI vector search to find exactly what you're looking for across the entire web—instantly.*
@@ -14,10 +16,6 @@
 [![GitHub forks](https://img.shields.io/github/forks/Ali-Hamza852/Shopsync?style=social)](https://github.com/Ali-Hamza852/Shopsync/network/members)
 
 <br />
-
-<img src="https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Vite-Dark.svg" width="800" alt="ShopSync Demo Animation Placeholder" style="border-radius: 12px; box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);" />
-<br>
-<i>(Animated UI Demo)</i>
 
 </div>
 
@@ -35,7 +33,7 @@ Traditional e-commerce search relies on basic keyword matching, leaving shoppers
 - **🎯 95%+ Confidence Clustering:** Identical products across different platforms are merged into unified "Cluster Cards." The model uses a strict `0.95` Cosine Similarity threshold to ensure zero false positives.
 - **🚀 Blazing Fast Vector Retrieval:** Utilizing **FAISS (HNSW)**, the backend searches through tens of thousands of dense vectors in milliseconds.
 - **🛡️ Triplet-Loss Robustness:** The AI is specifically trained to ignore human typos while violently rejecting "Evil Twin" products (e.g., matching a 128GB phone with a 256GB phone).
-- **📱 Glassmorphism UI:** A sleek, responsive, and modern Next.js frontend.
+- **📱 Glassmorphism UI:** A sleek, responsive, and modern Next.js frontend built with Tailwind CSS.
 
 ---
 
