@@ -4,7 +4,7 @@
 
 # 🛒 ShopSync
 
-**One Search. Every Store. Perfect Match.** *Powered by advanced AI vector search to find exactly what you're looking for across the entire web—instantly.*
+**Smarter search. Better shopping.** *Powered by advanced AI vector search to find exactly what you're looking for across the entire web—instantly.*
 
 [![Next.js](https://img.shields.io/badge/Frontend-Next.js_14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
